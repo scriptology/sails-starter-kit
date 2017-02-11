@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/styles/ng-admin.min.css">
+
+
+</head>
+<body ng-app="myApp">
+
+	<div ui-view="ng-admin"></div>
+
+	<script src="/js/dependencies/ng-admin.min.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+		var myApp = angular.module('myApp', ['ng-admin']);
+		myApp.config([
+			'NgAdminConfigurationProvider',
+			'RestangularProvider',
+			function(NgAdminConfigurationProvider, RestangularProvider) {
+    		var nga = NgAdminConfigurationProvider;
+    		// create an admin application
+
+    		var admin = nga.application(<%- jsonAppName %>)
+    				.baseApiUrl(<%- jsonUri %>);
+
+            var user = nga.entity('user');
+            // set the fields of the user entity list view
+            user.listView().fields([
+                nga.field('id'),
+                nga.field('firstname'),
+                nga.field('lastname'),
+                nga.field('createdAt')
+            ]);
+            user.creationView().fields([
+              nga.field('firstname'),
+              nga.field('lastname'),
+            ]);
+            user.editionView().fields([
+              nga.field('firstname'),
+              nga.field('lastname'),
+            ]);
+            // add the user entity to the admin application
+            admin.addEntity(user);
+
+            // attach the admin application to the DOM and run it
+            nga.configure(admin);
+
+        }]);
+
+
+// </script>
+
+<!-- <% entities.forEach(function(entity) { %>
+	<%- entity.jsonName %>
+<% }); %> -->
+
+</body>
+</html>
